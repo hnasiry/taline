@@ -16,12 +16,9 @@ return new class extends Migration
             $table->uuid()->unique();
             $table->foreignId('buy_order_id')->constrained('orders');
             $table->foreignId('sell_order_id')->constrained('orders');
-            $table->foreignId('buyer_id')->constrained('users');
-            $table->foreignId('seller_id')->constrained('users');
             $table->unsignedBigInteger('weight');
             $table->unsignedBigInteger('price_per_gram');
             $table->unsignedBigInteger('total_price');
-            $table->unsignedBigInteger('fee')->default(0);
             $table->timestamps();
         });
     }

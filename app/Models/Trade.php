@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\GoldWeightCast;
+use App\Casts\RialAmountCast;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,12 +18,15 @@ class Trade extends Model
         'uuid',
         'buy_order_id',
         'sell_order_id',
-        'buyer_id',
-        'seller_id',
         'weight',
         'price_per_gram',
         'total_price',
-        'fee',
+    ];
+
+    protected $casts = [
+        'weight'         => GoldWeightCast::class,
+        'price_per_gram' => RialAmountCast::class,
+        'total_price'    => RialAmountCast::class,
     ];
 
     public function buyOrder(): BelongsTo
@@ -32,16 +37,6 @@ class Trade extends Model
     public function sellOrder(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'sell_order_id');
-    }
-
-    public function buyer(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'buyer_id');
-    }
-
-    public function seller(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'seller_id');
     }
 
     public function transactions(): MorphMany

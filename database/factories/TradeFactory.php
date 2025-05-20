@@ -17,12 +17,9 @@ class TradeFactory extends Factory
             'uuid'           => $this->faker->uuid(),
             'buy_order_id'   => Order::factory()->buy()->create()->id,
             'sell_order_id'  => Order::factory()->sell()->create()->id,
-            'buyer_id'       => fn($attributes) => Order::findOrFail($attributes['buy_order_id'])->user_id,
-            'seller_id'      => fn($attributes) => Order::findOrFail($attributes['sell_order_id'])->user_id,
             'weight'         => $this->faker->randomNumber(),
             'price_per_gram' => $this->faker->randomNumber(),
             'total_price'    => $this->faker->randomNumber(),
-            'fee'            => $this->faker->randomNumber(),
             'created_at'     => Carbon::now(),
             'updated_at'     => Carbon::now(),
         ];

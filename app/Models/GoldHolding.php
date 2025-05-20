@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\GoldWeightCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,13 @@ class GoldHolding extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'weight'];
+    protected $fillable = [
+        'user_id', 'weight'
+    ];
+
+    protected $casts = [
+        'weight' => GoldWeightCast::class
+    ];
 
     public function user(): BelongsTo
     {

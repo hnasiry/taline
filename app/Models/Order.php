@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Casts\GoldWeightCast;
+use App\Casts\RialAmountCast;
+use App\Enums\OrderStatus;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -22,7 +25,16 @@ class Order extends Model
         'price_per_gram',
         'total_weight',
         'remaining_weight',
+        'fee',
         'status',
+    ];
+
+    protected $casts = [
+        'price_per_gram'   => RialAmountCast::class,
+        'total_weight'     => GoldWeightCast::class,
+        'remaining_weight' => GoldWeightCast::class,
+        'fee'              => RialAmountCast::class,
+        'status'           => OrderStatus::class,
     ];
 
     public function user(): BelongsTo
