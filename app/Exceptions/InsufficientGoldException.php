@@ -20,6 +20,6 @@ class InsufficientGoldException extends RuntimeException
             ], 422);
         }
 
-        return parent::render($request);
+        return false;
     }
 }

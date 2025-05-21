@@ -88,8 +88,8 @@ final class GoldWeight implements Stringable
     public function format(string $unit = self::UNIT_G): string
     {
         return match ($unit) {
-            self::UNIT_MG      => $this->inMilligrams()->toScale(0, RoundingMode::HALF_UP) . ' mg',
-            self::UNIT_G       => $this->inGrams()->toScale(3, RoundingMode::HALF_UP) . ' g',
+            self::UNIT_MG      => $this->inMilligrams() . ' mg',
+            self::UNIT_G       => $this->inGrams() . ' g',
             default => throw new InvalidArgumentException("Invalid unit: {$unit}"),
         };
     }
