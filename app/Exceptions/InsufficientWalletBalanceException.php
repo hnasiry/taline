@@ -9,4 +9,16 @@ class InsufficientWalletBalanceException extends RuntimeException
     {
         parent::__construct($message);
     }
+
+    public function render($request)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $this->getMessage(),
+                'error'   => 'insufficient_wallet_balance',
+            ], 422);
+        }
+
+        return parent::render($request);
+    }
 }

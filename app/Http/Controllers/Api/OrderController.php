@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\DataTransferObjects\PlaceOrderData;
 use App\Enums\OrderStatus;
+use App\Enums\OrderType;
 use App\Exceptions\OrderCannotBeCancelledException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Services\OrderService;
+use App\ValueObjects\GoldWeight;
+use App\ValueObjects\RialAmount;
 use App\ValueObjects\UserId;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -49,16 +52,16 @@ class OrderController extends Controller
         $order = $orderService->place(
             new PlaceOrderData(
                 userId      : new UserId(auth()->id()),
-                type        : $request->get('type'),
-                weight      : $request->get('weight'),
-                pricePerGram: $request->get('price_per_gram')
+                type        : $request->enum('type', OrderType::class),
+                weight      : GoldWeight::fromMilligrams($request->get('weight')),
+                pricePerGram: new RialAmount($request->get('price_per_gram'))
             )
         );
 
-        return response()->json(
-            data: new OrderResource($order),
-            status: 201
-        );
+        $order->load($order->type->isBuy() ? 'buyTrades' : 'sellTrades');
+        return response()->json([
+            'data' => new OrderResource($order)
+        ], 201);
     }
 
     public function destroy(string $orderUuid, OrderService $orderService)

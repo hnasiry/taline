@@ -15,15 +15,15 @@ class GoldWeightCast implements CastsAttributes
         return GoldWeight::fromMilligrams($value);
     }
 
-    public function set(Model $model, string $key, mixed $value, array $attributes): BigDecimal
+    public function set(Model $model, string $key, mixed $value, array $attributes): int
     {
         if ($value instanceof GoldWeight) {
             return $value->inMilligrams();
         }
 
-        // If the value is numeric, assume it's in grams
+        // If the value is numeric, assume it's in milligrams
         if (is_numeric($value)) {
-            return (new GoldWeight((float) $value, GoldWeight::UNIT_G))->inMilligrams();
+            return (new GoldWeight((float) $value, GoldWeight::UNIT_MG))->inMilligrams();
         }
 
         throw new InvalidArgumentException("Invalid value for GoldWeightCast.");

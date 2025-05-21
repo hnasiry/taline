@@ -35,6 +35,11 @@ class Transaction extends Model
         'amount'    => 'integer',
     ];
 
+    public function uniqueIds()
+    {
+        return ['uuid'];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

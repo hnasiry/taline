@@ -58,7 +58,7 @@ class OrderService
     {
         $matches = Order::query()
             ->where('type', $incomingOrder->type->getOpposite())
-            ->where('price_per_gram', $incomingOrder->price_per_gram)
+            ->where('price_per_gram', $incomingOrder->price_per_gram->getValue())
             ->where('remaining_weight', '>', 0)
             ->whereIn('status', [OrderStatus::Open, OrderStatus::Partial])
             ->orderBy('created_at')

@@ -31,6 +31,11 @@ class Trade extends Model
         'fee'            => RialAmountCast::class,
     ];
 
+    public function uniqueIds()
+    {
+        return ['uuid'];
+    }
+
     public function buyOrder(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'buy_order_id');

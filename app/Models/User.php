@@ -37,6 +37,14 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public static function booted(): void
+    {
+        static::created(function (User $user) {
+            $user->wallet()->create(['balance' => 0]);
+            $user->goldHolding()->create(['weight' => 0]);
+        });
+    }
+
     /**
      * Get the attributes that should be cast.
      *

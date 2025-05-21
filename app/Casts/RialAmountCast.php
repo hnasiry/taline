@@ -17,7 +17,7 @@ class RialAmountCast implements CastsAttributes
     public function set(Model $model, string $key, mixed $value, array $attributes): int
     {
         if ($value instanceof RialAmount) {
-            return $value->amount();
+            return $value->getValue();
         }
 
         if (is_int($value)) {

@@ -77,7 +77,7 @@ final class GoldWeight implements Stringable
 
     public function min(self $other): self
     {
-        return self::fromMilligrams($this->milligrams->min($other->milligrams));
+        return self::fromMilligrams(BigDecimal::min($this->milligrams, $other->milligrams));
     }
 
     public function isZero(): bool

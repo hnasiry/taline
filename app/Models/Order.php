@@ -39,6 +39,11 @@ class Order extends Model
         'status'           => OrderStatus::class,
     ];
 
+    public function uniqueIds()
+    {
+        return ['uuid'];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

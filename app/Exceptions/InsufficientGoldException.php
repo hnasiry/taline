@@ -10,4 +10,16 @@ class InsufficientGoldException extends RuntimeException
     {
         parent::__construct($message);
     }
+
+    public function render($request)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $this->getMessage(),
+                'error'   => 'insufficient_gold',
+            ], 422);
+        }
+
+        return parent::render($request);
+    }
 }

@@ -25,7 +25,7 @@ class OrderRequest extends FormRequest
     {
         return [
             'type'           => ['required', Rule::enum(OrderType::class)],
-            'weight'         => ['required', 'decimal:3', 'min:0.001'],
+            'weight'         => ['required', 'integer', 'min:1'],
             'price_per_gram' => ['required', 'integer', 'min:1000']
         ];
     }

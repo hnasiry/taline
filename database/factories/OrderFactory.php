@@ -22,6 +22,7 @@ class OrderFactory extends Factory
             'price_per_gram'   => $this->faker->randomNumber(),
             'total_weight'     => $this->faker->randomNumber(),
             'remaining_weight' => $this->faker->randomNumber(),
+            'total_price'      => $this->faker->randomNumber(),
             'status'           => $this->faker->randomElement(OrderStatus::cases()),
             'created_at'       => Carbon::now(),
             'updated_at'       => Carbon::now(),
