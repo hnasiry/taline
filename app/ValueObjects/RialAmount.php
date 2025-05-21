@@ -2,6 +2,8 @@
 
 namespace App\ValueObjects;
 
+use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 use InvalidArgumentException;
 use Stringable;
 
@@ -41,6 +43,18 @@ final readonly class RialAmount implements Stringable
         return new self($result);
     }
 
+    public function multiplyByWeight(GoldWeight $weight): self
+    {
+        $pricePerGram = BigDecimal::of($this->value);
+        $milligrams   = BigDecimal::of($weight->inMilligrams());
+
+        $total = $pricePerGram
+            ->multipliedBy($milligrams)
+            ->dividedBy(1000, 0, RoundingMode::HALF_UP);
+
+        return new self($total->toInt());
+    }
+
     public function equals(self $other): bool
     {
         return $this->value === $other->value;
@@ -49,6 +63,11 @@ final readonly class RialAmount implements Stringable
     public function greaterThan(self $other): bool
     {
         return $this->value > $other->value;
+    }
+
+    public function lessThan(self $other): bool
+    {
+        return $this->value < $other->value;
     }
 
     public function isZero(): bool

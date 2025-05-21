@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Casts\GoldWeightCast;
 use App\Casts\RialAmountCast;
 use App\Enums\OrderStatus;
+use App\Enums\OrderType;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -24,16 +25,17 @@ class Order extends Model
         'type',
         'price_per_gram',
         'total_weight',
+        'total_price',
         'remaining_weight',
-        'fee',
         'status',
     ];
 
     protected $casts = [
+        'type'             => OrderType::class,
         'price_per_gram'   => RialAmountCast::class,
         'total_weight'     => GoldWeightCast::class,
+        'total_price'      => RialAmountCast::class,
         'remaining_weight' => GoldWeightCast::class,
-        'fee'              => RialAmountCast::class,
         'status'           => OrderStatus::class,
     ];
 

@@ -21,12 +21,14 @@ class Trade extends Model
         'weight',
         'price_per_gram',
         'total_price',
+        'fee',
     ];
 
     protected $casts = [
         'weight'         => GoldWeightCast::class,
         'price_per_gram' => RialAmountCast::class,
         'total_price'    => RialAmountCast::class,
+        'fee'            => RialAmountCast::class,
     ];
 
     public function buyOrder(): BelongsTo

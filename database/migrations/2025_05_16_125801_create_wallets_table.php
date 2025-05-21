@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('balance')->default(0); // Rial
+            $table->unsignedBigInteger('locked_balance')->default(0); // Rial
             $table->timestamps();
         });
     }

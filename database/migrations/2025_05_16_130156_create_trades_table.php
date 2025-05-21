@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('weight');
             $table->unsignedBigInteger('price_per_gram');
             $table->unsignedBigInteger('total_price');
+            $table->unsignedBigInteger('fee');
             $table->timestamps();
         });
     }

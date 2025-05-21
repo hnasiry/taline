@@ -20,6 +20,7 @@ class TradeFactory extends Factory
             'weight'         => $this->faker->randomNumber(),
             'price_per_gram' => $this->faker->randomNumber(),
             'total_price'    => $this->faker->randomNumber(),
+            'fee'            => $this->faker->randomNumber(),
             'created_at'     => Carbon::now(),
             'updated_at'     => Carbon::now(),
         ];

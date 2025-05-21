@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('type', ['buy', 'sell']);
             $table->unsignedBigInteger('price_per_gram'); // Rial per gram
             $table->unsignedBigInteger('total_weight');
+            $table->unsignedBigInteger('total_price');
             $table->unsignedBigInteger('remaining_weight');
             $table->enum('status', ['open', 'filled', 'cancelled', 'partial']);
             $table->timestamps();

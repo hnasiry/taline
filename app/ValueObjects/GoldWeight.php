@@ -35,14 +35,19 @@ final class GoldWeight implements Stringable
         return new self($g, self::UNIT_G);
     }
 
-    public function inMilligrams(): BigDecimal
+    public function inMilligrams(): int
     {
-        return $this->milligrams;
+        return $this->milligrams->toInt();
     }
 
-    public function inGrams(): BigDecimal
+    public function inGramsDecimal(): BigDecimal
     {
         return $this->milligrams->dividedBy(1000, 6, RoundingMode::HALF_UP);
+    }
+
+    public function inGrams(): float
+    {
+        return $this->inGramsDecimal()->toFloat();
     }
 
     public function add(self $other): self
@@ -63,6 +68,16 @@ final class GoldWeight implements Stringable
     public function greaterThan(self $other): bool
     {
         return $this->milligrams->isGreaterThan($other->milligrams);
+    }
+
+    public function lessThan(self $other): bool
+    {
+        return $this->milligrams->isLessThan($other->milligrams);
+    }
+
+    public function min(self $other): self
+    {
+        return self::fromMilligrams($this->milligrams->min($other->milligrams));
     }
 
     public function isZero(): bool
