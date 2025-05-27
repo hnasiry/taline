@@ -53,50 +53,53 @@ class GoldHoldingService
 
     public function add(User $user, GoldWeight $amount, TransactionType $type = TransactionType::TRADE, ?string $description = null, $source = null): void
     {
-        $holding = $user->goldHolding()->lockForUpdate()->first();
+        \DB::transaction(function () use ($user, $amount, $type, $description, $source) {
+            $holding = $user->goldHolding()->lockForUpdate()->first();
 
-        $this->transactionService->log(
-            new LogTransactionData(
-                userId: new UserId($user->id),
-                amount: $amount->inMilligrams(),
-                direction: Direction::Credit,
-                type: $type,
-                asset: AssetType::Gold,
-                description: $description ?? 'Gold received',
-                source: $source
-            )
-        );
+            $this->transactionService->log(
+                new LogTransactionData(
+                    userId: new UserId($user->id),
+                    amount: $amount->inMilligrams(),
+                    direction: Direction::Credit,
+                    type: $type,
+                    asset: AssetType::Gold,
+                    description: $description ?? 'Gold received',
+                    source: $source
+                )
+            );
 
-        // Sync cache
-        $holding->weight = $this->getGoldBalance($user)->add($amount);
-        $holding->save();
+            // Sync cache
+            $holding->weight = $this->getGoldBalance($user)->add($amount);
+            $holding->save();
+        });
     }
 
     public function deduct(User $user, GoldWeight $amount, TransactionType $type = TransactionType::TRADE, ?string $description = null, $source = null): void
     {
-        $holding = $user->goldHolding()->lockForUpdate()->first();
+        \DB::transaction(function () use ($user, $amount, $type, $description, $source) {
+            $holding = $user->goldHolding()->lockForUpdate()->first();
+            $balance = $this->getGoldBalance($user);
 
-        $balance = $this->getGoldBalance($user);
+            if ($balance->lessThan($amount)) {
+                throw new InsufficientGoldException('Not enough gold balance to deduct.');
+            }
 
-        if ($balance->lessThan($amount)) {
-            throw new InsufficientGoldException('Not enough gold balance to deduct.');
-        }
+            $this->transactionService->log(
+                new LogTransactionData(
+                    userId: new UserId($user->id),
+                    amount: $amount->inMilligrams(),
+                    direction: Direction::Debit,
+                    type: $type,
+                    asset: AssetType::Gold,
+                    description: $description ?? 'Gold sent',
+                    source: $source
+                )
+            );
 
-        $this->transactionService->log(
-            new LogTransactionData(
-                userId: new UserId($user->id),
-                amount: $amount->inMilligrams(),
-                direction: Direction::Debit,
-                type: $type,
-                asset: AssetType::Gold,
-                description: $description ?? 'Gold sent',
-                source: $source
-            )
-        );
-
-        // Sync cache
-        $holding->weight = $balance->subtract($amount);
-        $holding->save();
+            // Sync cache
+            $holding->weight = $balance->subtract($amount);
+            $holding->save();
+        });
     }
 
 }
